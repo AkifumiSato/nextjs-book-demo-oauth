@@ -5,7 +5,7 @@ export async function verifySession() {
   const sessionStore = await session();
   const sessionValues = sessionStore.get();
   if (sessionValues?.status !== "authenticated") {
-    redirect("/", RedirectType.replace);
+    redirect("/login", RedirectType.replace);
   }
   return sessionValues;
 }
