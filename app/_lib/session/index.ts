@@ -4,7 +4,7 @@ import React from "react";
 import { v4 as uuid } from "uuid";
 import { SessionSchema, type SessionValues } from "./schema";
 
-const SESSION_COOKIE_NAME = "sessionId";
+export const SESSION_COOKIE_NAME = "sessionId";
 
 export const redis = new Redis({
   enableAutoPipelining: true,

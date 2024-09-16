@@ -10,7 +10,7 @@ export async function login() {
   await sessionStore.update((prev) => {
     return {
       ...prev,
-      status: "unauthenticated",
+      status: "preauthenticated",
       state,
     };
   });

@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
 
   const sessionStore = await session();
   const sessionValues = sessionStore.get();
-  if (sessionValues?.status !== "unauthenticated") {
+  if (sessionValues?.status !== "preauthenticated") {
     throw new Error("CSRF Token not found in session.");
   }
 
