@@ -2,21 +2,13 @@ import Redis from "ioredis";
 import { cookies } from "next/headers";
 import React from "react";
 import { v4 as uuid } from "uuid";
-import { z } from "zod";
+import { type SessionKeys, SessionSchema, type SessionValues } from "./schema";
 
 const SESSION_COOKIE_NAME = "sessionId";
 
 export const redis = new Redis({
   enableAutoPipelining: true,
 });
-
-const SessionSchema = z
-  .object({
-    status: z.enum(["authenticated", "unauthenticated"]),
-  })
-  .optional();
-
-type SessionValues = z.infer<typeof SessionSchema>;
 
 async function getServerSession(): Promise<Readonly<SessionValues>> {
   // todo: JWT
@@ -38,11 +30,11 @@ const getCachedServerSession = React.cache(getServerSession);
 export async function session() {
   const sessionValues = await getCachedServerSession();
   return {
-    get(name: keyof SessionValues) {
+    get<K extends SessionKeys>(name: K) {
       if (sessionValues === undefined) {
         return undefined;
       }
-      return sessionValues[name];
+      return sessionValues[name] as Exclude<SessionValues, undefined>[K];
     },
     getAll() {
       return sessionValues;
@@ -56,7 +48,7 @@ export async function session() {
           secure: process.env.NODE_ENV !== "development",
         });
       }
-      const newSession = updater(sessionValues);
+      const newSession = SessionSchema.parse(updater(sessionValues));
       await redis.set(sessionId, JSON.stringify(newSession));
     },
   };
