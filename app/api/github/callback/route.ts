@@ -10,8 +10,8 @@ export async function GET(request: NextRequest) {
   }
 
   const sessionStore = await session();
-  const sessionState = sessionStore.get("state");
-  if (!sessionState) {
+  const sessionValues = sessionStore.get();
+  if (sessionValues?.status !== "unauthenticated") {
     throw new Error("CSRF Token not found in session.");
   }
 
@@ -19,8 +19,8 @@ export async function GET(request: NextRequest) {
 
   // check state(csrf token)
   const urlState = searchParams.get("state");
-  if (sessionState !== urlState) {
-    console.error("CSRF Token", sessionState, urlState);
+  if (sessionValues.state !== urlState) {
+    console.error("CSRF Token", sessionValues, urlState);
     throw new Error("CSRF Token not equaled.");
   }
 

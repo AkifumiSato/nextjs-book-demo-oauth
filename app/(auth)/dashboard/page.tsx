@@ -1,17 +1,13 @@
-import { RedirectType, redirect } from "next/navigation";
 import { z } from "zod";
-import { session } from "../../_lib/session";
+import { verifySession } from "../_lib/verify-session";
 
 export default async function Page() {
-  const sessionStore = await session();
-  if (sessionStore.get("status") !== "authenticated") {
-    redirect("/", RedirectType.replace);
-  }
+  const sessionValues = await verifySession();
 
   const githubUser = await fetch("https://api.github.com/user", {
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${sessionStore.get("github")?.access_token}`,
+      Authorization: `Bearer ${sessionValues.github.access_token}`,
     },
   }).then(async (res) => {
     if (!res.ok) {

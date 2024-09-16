@@ -4,7 +4,7 @@ import { logout } from "./_actions/logout";
 import { session } from "./_lib/session";
 
 export default async function Page() {
-  const sessionValues = (await session()).getAll();
+  const sessionValues = (await session()).get();
 
   return (
     <main>

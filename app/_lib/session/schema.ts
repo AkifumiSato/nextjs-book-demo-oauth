@@ -1,13 +1,18 @@
 import { z } from "zod";
 import { GithubAccessTokenResponse } from "../github";
 
+const Authenticated = z.object({
+  status: z.literal("authenticated"),
+  github: GithubAccessTokenResponse,
+});
+
+const Unauthenticated = z.object({
+  status: z.literal("unauthenticated"),
+  state: z.string().min(1).optional(),
+});
+
 export const SessionSchema = z
-  .object({
-    status: z.enum(["authenticated", "unauthenticated"]),
-    state: z.string().min(1).optional(), // CSRF Token used to GitHub OAuth
-    github: GithubAccessTokenResponse.optional(),
-  })
+  .discriminatedUnion("status", [Authenticated, Unauthenticated])
   .optional();
 
 export type SessionValues = z.infer<typeof SessionSchema>;
-export type SessionKeys = keyof Exclude<SessionValues, undefined>;
