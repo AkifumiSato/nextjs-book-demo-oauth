@@ -11,7 +11,6 @@ export const redis = new Redis({
 });
 
 async function getServerSession() {
-  // todo: JWT
   const sessionIdFromCookie = cookies().get(SESSION_COOKIE_NAME)?.value;
   if (sessionIdFromCookie === undefined) {
     return undefined;
