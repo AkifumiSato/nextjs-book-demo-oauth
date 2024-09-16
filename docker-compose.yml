@@ -1,0 +1,14 @@
+services:
+  redis:
+    image: redis
+    ports:
+      - 6379:6379
+    expose:
+      - 6379
+    container_name: nextjs_book_demo_oauth_redis
+    volumes:
+      - nextjs-book-demo-oauth-redis:/data
+    restart: always
+volumes:
+  nextjs-book-demo-oauth-redis:
+    driver: local

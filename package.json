@@ -10,15 +10,19 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "ioredis": "5.4.1",
     "next": "14.2.11",
     "react": "18.3.1",
-    "react-dom": "18.3.1"
+    "react-dom": "18.3.1",
+    "uuid": "10.0.0",
+    "zod": "3.23.8"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.1",
     "@types/node": "20.10.8",
     "@types/react": "18.2.47",
     "@types/react-dom": "18.2.18",
+    "@types/uuid": "10.0.0",
     "husky": "9.1.6",
     "typescript": "5.6.2"
   }
