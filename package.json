@@ -3,17 +3,23 @@
   "scripts": {
     "dev": "next dev --turbo",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "clean-start": "rm -rf .next && next build && next start",
+    "check": "biome check .",
+    "check:apply": "biome check . --apply",
+    "prepare": "husky"
   },
   "dependencies": {
-    "next": "latest",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "next": "14.2.11",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.9.1",
     "@types/node": "20.10.8",
     "@types/react": "18.2.47",
     "@types/react-dom": "18.2.18",
-    "typescript": "^5.3.3"
+    "husky": "9.1.6",
+    "typescript": "5.6.2"
   }
 }
