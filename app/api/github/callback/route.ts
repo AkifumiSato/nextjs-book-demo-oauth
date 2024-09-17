@@ -1,7 +1,7 @@
 import { RedirectType, redirect } from "next/navigation";
 import type { NextRequest } from "next/server";
 import { z } from "zod";
-import { session } from "../../../_lib/session";
+import { sessionStore } from "../../../_lib/session";
 import { handleWithZod } from "../../../_lib/utils/fetch-handler";
 
 export const dynamic = "force-dynamic";
@@ -9,8 +9,7 @@ export const dynamic = "force-dynamic";
 const { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } = process.env;
 
 export async function GET(request: NextRequest) {
-  const sessionStore = await session();
-  const sessionValues = sessionStore.get();
+  const sessionValues = await sessionStore.get();
   if (sessionValues?.status !== "preauthenticated") {
     throw new Error("CSRF Token not found in session.");
   }

@@ -2,10 +2,9 @@
 
 import { redirect } from "next/navigation";
 import { v4 as uuid } from "uuid";
-import { session } from "../../_lib/session";
+import { sessionStore } from "../../_lib/session";
 
 export async function login() {
-  const sessionStore = await session();
   const state = uuid();
   await sessionStore.start({
     status: "preauthenticated",

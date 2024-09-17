@@ -30,41 +30,40 @@ async function getServerSession() {
 
 const getCachedServerSession = React.cache(getServerSession);
 
-export async function session() {
-  const sessionValues = await getCachedServerSession();
-  return {
-    get() {
-      return sessionValues;
-    },
-    async start(initialValue: SessionValues) {
-      if (cookies().get(SESSION_COOKIE_NAME)?.value !== undefined) {
-        throw new Error("Session already started");
-      }
-      const sessionId = uuid();
-      await redis.set(sessionId, JSON.stringify(initialValue));
-      const cookieValue = await encrypt({ sessionId });
-      cookies().set(SESSION_COOKIE_NAME, cookieValue, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV !== "development",
-      });
-    },
-    async update(updater: (prev: SessionValues) => SessionValues) {
-      const sessionId = await getSessionId();
-      if (sessionId === undefined) {
-        throw new Error("Session not started");
-      }
-      const newSession = SessionSchema.parse(updater(sessionValues));
-      await redis.set(sessionId, JSON.stringify(newSession));
-      // 他処理と異なりcookieの操作が発生しないため、revalidateで代用
-      revalidateTag("session");
-    },
-    async destroy() {
-      const sessionId = await getSessionId();
-      if (sessionId === undefined) {
-        throw new Error("Session not started");
-      }
-      await redis.del(sessionId);
-      cookies().delete(SESSION_COOKIE_NAME);
-    },
-  };
-}
+export const sessionStore = {
+  async get() {
+    return await getCachedServerSession();
+  },
+  async start(initialValue: SessionValues) {
+    if (cookies().get(SESSION_COOKIE_NAME)?.value !== undefined) {
+      throw new Error("Session already started");
+    }
+    const sessionId = uuid();
+    await redis.set(sessionId, JSON.stringify(initialValue));
+    const cookieValue = await encrypt({ sessionId });
+    cookies().set(SESSION_COOKIE_NAME, cookieValue, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV !== "development",
+    });
+  },
+  async update(updater: (prev: SessionValues) => SessionValues) {
+    const sessionId = await getSessionId();
+    if (sessionId === undefined) {
+      throw new Error("Session not started");
+    }
+
+    const oldSession = await getCachedServerSession();
+    const newSession = SessionSchema.parse(updater(oldSession));
+    await redis.set(sessionId, JSON.stringify(newSession));
+    // 他処理と異なりcookieの操作が発生しないため、revalidateで代用
+    revalidateTag("session");
+  },
+  async destroy() {
+    const sessionId = await getSessionId();
+    if (sessionId === undefined) {
+      throw new Error("Session not started");
+    }
+    await redis.del(sessionId);
+    cookies().delete(SESSION_COOKIE_NAME);
+  },
+};

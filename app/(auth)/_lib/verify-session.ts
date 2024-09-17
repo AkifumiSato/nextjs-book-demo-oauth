@@ -1,9 +1,8 @@
 import { RedirectType, redirect } from "next/navigation";
-import { session } from "../../_lib/session";
+import { sessionStore } from "../../_lib/session";
 
 export async function verifySession() {
-  const sessionStore = await session();
-  const sessionValues = sessionStore.get();
+  const sessionValues = await sessionStore.get();
   if (sessionValues?.status !== "authenticated") {
     redirect("/login", RedirectType.replace);
   }

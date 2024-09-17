@@ -1,4 +1,4 @@
-import { session } from "../../_lib/session";
+import { sessionStore } from "../../_lib/session";
 import { logout } from "../_actions/logout";
 import { GithubUser } from "./_containers/github-user";
 
@@ -16,7 +16,7 @@ export const metadata = {
 };
 
 async function Debug() {
-  const sessionValues = (await session()).get();
+  const sessionValues = await sessionStore.get();
 
   return (
     <>
