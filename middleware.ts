@@ -1,5 +1,5 @@
-import { minimatch } from "minimatch";
 import { type NextRequest, NextResponse } from "next/server";
+import pm from "picomatch";
 import { getSessionId } from "./app/_lib/session/utils";
 
 const protectedRoutes = ["/dashboard/*"];
@@ -9,15 +9,11 @@ export default async function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
   const sessionId = await getSessionId();
 
-  const isProtectedRoute = protectedRoutes.some((route) =>
-    minimatch(path, route),
-  );
-  if (isProtectedRoute && !sessionId) {
+  if (pm.isMatch(path, protectedRoutes) && !sessionId) {
     return NextResponse.redirect(new URL("/login", req.nextUrl));
   }
 
-  const isPublicRoute = publicRoutes.some((route) => minimatch(path, route));
-  if (isPublicRoute && sessionId) {
+  if (pm.isMatch(path, publicRoutes) && sessionId) {
     return NextResponse.redirect(new URL("/dashboard", req.nextUrl));
   }
 
