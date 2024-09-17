@@ -4,23 +4,14 @@ import { revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
 import React from "react";
 import { v4 as uuid } from "uuid";
-import { decrypt, encrypt } from "./jwt";
+import { SESSION_COOKIE_NAME } from "./cookie-names";
+import { encrypt } from "./jwt";
 import { SessionSchema, type SessionValues } from "./schema";
-
-const SESSION_COOKIE_NAME = "sessionId";
+import { getSessionId } from "./utils";
 
 export const redis = new Redis({
   enableAutoPipelining: true,
 });
-
-async function getSessionId() {
-  const sessionCookie = cookies().get(SESSION_COOKIE_NAME)?.value;
-  if (sessionCookie === undefined) {
-    return undefined;
-  }
-  const payload = await decrypt(sessionCookie);
-  return payload?.sessionId;
-}
 
 async function getServerSession() {
   const sessionId = await getSessionId();
