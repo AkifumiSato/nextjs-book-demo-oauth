@@ -1,6 +1,6 @@
 import { RedirectType, redirect } from "next/navigation";
 import type { NextRequest } from "next/server";
-import { GithubAccessTokenResponse } from "../../../_lib/github";
+import { z } from "zod";
 import { session } from "../../../_lib/session";
 
 export async function GET(request: NextRequest) {
@@ -41,9 +41,19 @@ export async function GET(request: NextRequest) {
   await sessionStore.update((_prev) => {
     return {
       status: "authenticated",
-      github: githubResponse,
+      github: {
+        accessToken: githubResponse.access_token,
+        tokenType: githubResponse.token_type,
+        scope: githubResponse.scope,
+      },
     };
   });
 
   redirect("/", RedirectType.replace);
 }
+
+const GithubAccessTokenResponse = z.object({
+  access_token: z.string(),
+  token_type: z.string(),
+  scope: z.string(),
+});

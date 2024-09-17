@@ -7,7 +7,7 @@ export async function fetchGithubUser() {
   return fetch("https://api.github.com/user", {
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${sessionValues.github.access_token}`,
+      Authorization: `Bearer ${sessionValues.github.accessToken}`,
     },
   }).then(async (res) => {
     if (!res.ok) {

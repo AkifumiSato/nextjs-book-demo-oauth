@@ -1,9 +1,12 @@
 import { z } from "zod";
-import { GithubAccessTokenResponse } from "../github";
 
 const Authenticated = z.object({
   status: z.literal("authenticated"),
-  github: GithubAccessTokenResponse,
+  github: z.object({
+    accessToken: z.string(),
+    tokenType: z.string(),
+    scope: z.string(),
+  }),
 });
 
 const PreAuthenticated = z.object({
