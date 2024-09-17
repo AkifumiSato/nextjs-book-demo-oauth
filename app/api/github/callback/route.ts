@@ -6,9 +6,9 @@ import { handleWithZod } from "../../../_lib/utils/fetch-handler";
 
 export const dynamic = "force-dynamic";
 
-export async function GET(request: NextRequest) {
-  const { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } = process.env;
+const { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } = process.env;
 
+export async function GET(request: NextRequest) {
   const sessionStore = await session();
   const sessionValues = sessionStore.get();
   if (sessionValues?.status !== "preauthenticated") {

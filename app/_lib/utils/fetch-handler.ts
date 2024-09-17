@@ -1,3 +1,4 @@
+import "server-only";
 import type { Schema } from "zod";
 
 export function handleWithZod<T>(schema: Schema) {

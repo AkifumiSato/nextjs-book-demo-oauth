@@ -1,4 +1,3 @@
-import "server-only";
 import Redis from "ioredis";
 import { revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
