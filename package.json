@@ -11,9 +11,11 @@
   },
   "dependencies": {
     "ioredis": "5.4.1",
+    "jose": "5.9.2",
     "next": "14.2.11",
     "react": "18.3.1",
     "react-dom": "18.3.1",
+    "server-only": "0.0.1",
     "uuid": "10.0.0",
     "zod": "3.23.8"
   },

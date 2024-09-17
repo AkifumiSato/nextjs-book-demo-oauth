@@ -3,6 +3,8 @@ import type { NextRequest } from "next/server";
 import { z } from "zod";
 import { session } from "../../../_lib/session";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(request: NextRequest) {
   const { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } = process.env;
   if (GITHUB_CLIENT_ID === undefined || GITHUB_CLIENT_SECRET === undefined) {

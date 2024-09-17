@@ -1,4 +1,4 @@
-import { login } from "../_actions/login";
+import { login } from "./_actions/login";
 
 export default async function Page() {
   return (
