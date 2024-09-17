@@ -8,9 +8,6 @@ export const dynamic = "force-dynamic";
 
 export async function GET(request: NextRequest) {
   const { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } = process.env;
-  if (GITHUB_CLIENT_ID === undefined || GITHUB_CLIENT_SECRET === undefined) {
-    throw new Error("GITHUB_CLIENT_ID or GITHUB_CLIENT_SECRET is not defined");
-  }
 
   const sessionStore = await session();
   const sessionValues = sessionStore.get();
@@ -27,9 +24,8 @@ export async function GET(request: NextRequest) {
     throw new Error("CSRF Token not equaled.");
   }
 
-  const code = searchParams.get("code");
   const githubResponse = await fetch(
-    `https://github.com/login/oauth/access_token?client_id=${GITHUB_CLIENT_ID}&client_secret=${GITHUB_CLIENT_SECRET}&code=${code}`,
+    `https://github.com/login/oauth/access_token?client_id=${GITHUB_CLIENT_ID}&client_secret=${GITHUB_CLIENT_SECRET}&code=${searchParams.get("code")}`,
     {
       method: "GET",
       headers: {
@@ -48,7 +44,6 @@ export async function GET(request: NextRequest) {
       },
     };
   });
-
   redirect("/", RedirectType.replace);
 }
 
