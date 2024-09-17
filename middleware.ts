@@ -1,19 +1,19 @@
 import { type NextRequest, NextResponse } from "next/server";
-import pm from "picomatch";
+import { isMatch } from "picomatch";
 import { getSessionId } from "./app/_lib/session/utils";
 
 const protectedRoutes = ["/dashboard/*"];
-const publicRoutes = ["/login", "/"];
+const publicRoutes = ["/", "/login"];
 
 export default async function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
   const sessionId = await getSessionId();
 
-  if (pm.isMatch(path, protectedRoutes) && !sessionId) {
+  if (isMatch(path, protectedRoutes) && !sessionId) {
     return NextResponse.redirect(new URL("/login", req.nextUrl));
   }
 
-  if (pm.isMatch(path, publicRoutes) && sessionId) {
+  if (isMatch(path, publicRoutes) && sessionId) {
     return NextResponse.redirect(new URL("/dashboard", req.nextUrl));
   }
 
