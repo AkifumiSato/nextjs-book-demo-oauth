@@ -1,5 +1,5 @@
 import { verifySession } from "../../../_lib/verify-session";
-import { GithubUserResponseSchema } from "../../_containers/github-user/schema";
+import { GithubUserResponseSchema } from "./schema";
 
 export async function fetchGithubUser() {
   const sessionValues = await verifySession();

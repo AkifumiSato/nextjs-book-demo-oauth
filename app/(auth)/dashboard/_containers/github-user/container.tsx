@@ -1,4 +1,4 @@
-import { fetchGithubUser } from "../../_lib/fetcher/github-user";
+import { fetchGithubUser } from "./fetchers";
 import { GithubUserPresentational } from "./presentational";
 
 export async function GithubUser() {
