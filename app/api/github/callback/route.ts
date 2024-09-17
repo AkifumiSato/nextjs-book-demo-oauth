@@ -2,6 +2,7 @@ import { RedirectType, redirect } from "next/navigation";
 import type { NextRequest } from "next/server";
 import { z } from "zod";
 import { session } from "../../../_lib/session";
+import { handleWithZod } from "../../../_lib/utils/fetch-handler";
 
 export const dynamic = "force-dynamic";
 
@@ -35,10 +36,7 @@ export async function GET(request: NextRequest) {
         Accept: " application/json",
       },
     },
-  ).then(async (res) => {
-    if (!res.ok) throw new Error("failed to get access token");
-    return GithubAccessTokenResponse.parse(await res.json());
-  });
+  ).then(handleWithZod(GithubAccessTokenResponse));
 
   await sessionStore.update((_prev) => {
     return {
