@@ -1,8 +1,10 @@
-import { sessionStore } from "../../_lib/session";
 import { logout } from "../_actions/logout";
+import { verifySession } from "../_lib/verify-session";
 import { GithubUser } from "./_containers/github-user";
 
 export default async function Page() {
+  await verifySession();
+
   return (
     <>
       <GithubUser />
@@ -16,7 +18,7 @@ export const metadata = {
 };
 
 async function Debug() {
-  const sessionValues = await sessionStore.get();
+  const sessionValues = await verifySession();
 
   return (
     <>
